@@ -1,0 +1,27 @@
+# Composer dependencies
+/vendor/
+# OS generated files
+.DS_Store
+Thumbs.db
+# IDE files
+.idea/
+*.iml
+# Log files
+*.log
+# Environment files
+.env
+# Build output
+/dist/
+build/
+
+coverage/
+
+tasks/
+/locales/
+js/
+img/
+fonts/
+font-awesome/
+email_templates/
+scripts/.env
+/css/
