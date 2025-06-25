@@ -1,7 +1,13 @@
 <?php
-require "./database.php";
-require "./secrets/EncDec.php";
-global $conn;
+require_once './vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . "/global/");
+$dotenv->load();
+
+require_once './global/config.php';
+require_once './global/db.php';
+require_once './global/helper.php';
+require_once './global/api.php';
+$conn = connectDB();
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $combined_token = urldecode(trim($_GET['token']));
@@ -56,7 +62,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     transform: none;
   }
 
-  /* Error styling */
   #errorNewPassword,
   #errorNewConfirmPassword {
     color: #ed5565;

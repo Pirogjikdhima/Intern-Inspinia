@@ -398,7 +398,7 @@ function sendEmail($email, $resetLink, $mail): array
             
             <div style='background-color: #f8f8f9; padding: 25px; border-radius: 6px; border-left: 4px solid #1ab394; margin: 20px 0;'>
                 <p style='color: #676a6c; margin: 0 0 20px 0; font-size: 0.95rem; line-height: 1.5;'>
-                    Click the button below to reset your password. This link will expire in 24 hours for security reasons.
+                    Click the button below to reset your password. This link will expire in 2 minutes for security reasons.
                 </p>
                 <div style='text-align: center;'>
                     <a href='$resetLink' style='display: inline-block; background: linear-gradient(135deg, #1ab394, #18a689); color: white; padding: 12px 30px; text-decoration: none; border-radius: 4px; font-weight: 400; font-size: 0.95rem; box-shadow: 0 2px 8px rgba(26, 179, 148, 0.3); transition: all 0.3s ease;'>
