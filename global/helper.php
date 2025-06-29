@@ -977,12 +977,10 @@ function getUserByIdFromDB($user_id, $conn): array
         $user = $result->fetch_assoc();
         $stmt->close();
 
-        // Format the data
         $user['role_name'] = ucfirst(strtolower($user['role_name']));
         $user['birthday'] = date('d/m/Y', strtotime($user['birthday']));
         $user['termsChecked'] = $user['termsChecked'] == 1;
 
-        // Get manager username if manager_id exists
         $user['manager_username'] = null;
         if ($user['manager_id']) {
             $manager_stmt = $conn->prepare("SELECT username FROM users WHERE id = ?");
@@ -1015,7 +1013,6 @@ function validateAdminManagerRules($user_id, $role_id, $manager_id, $conn): arra
     $is_admin = false;
 
     if ($role_id !== null) {
-        // Check if new role is admin
         $stmt = $conn->prepare("SELECT name FROM roles WHERE id = ?");
         $stmt->bind_param("i", $role_id);
         $stmt->execute();
@@ -1027,7 +1024,6 @@ function validateAdminManagerRules($user_id, $role_id, $manager_id, $conn): arra
             $is_admin = true;
         }
     } else {
-        // Check current role
         $stmt = $conn->prepare("SELECT r.name FROM roles r JOIN user_roles ur ON r.id = ur.role_id WHERE ur.user_id = ?");
         $stmt->bind_param("i", $user_id);
         $stmt->execute();
@@ -1040,7 +1036,6 @@ function validateAdminManagerRules($user_id, $role_id, $manager_id, $conn): arra
         }
     }
 
-    // Admin users cannot have managers
     if ($is_admin && $manager_id !== null) {
         return [
             'status' => false,
@@ -1086,7 +1081,6 @@ function updateUserDataInDB($user_id, $username, $firstName, $lastName, $phone, 
 function updateUserRoleInDB($user_id, $role_id, $conn): array
 {
     try {
-        // Get current role info
         $stmt = $conn->prepare("SELECT r.name AS role_name FROM roles r 
                         JOIN user_roles ur ON r.id = ur.role_id 
                         WHERE ur.user_id = ?");
@@ -1096,7 +1090,6 @@ function updateUserRoleInDB($user_id, $role_id, $conn): array
         $current_role = $result->fetch_assoc();
         $stmt->close();
 
-        // Get new role info
         $stmt = $conn->prepare("SELECT name FROM roles WHERE id = ?");
         $stmt->bind_param("i", $role_id);
         $stmt->execute();
@@ -1104,7 +1097,6 @@ function updateUserRoleInDB($user_id, $role_id, $conn): array
         $new_role = $result->fetch_assoc();
         $stmt->close();
 
-        // Check if user_roles entry exists
         $stmt = $conn->prepare("SELECT COUNT(*) as count FROM user_roles WHERE user_id = ?");
         $stmt->bind_param("i", $user_id);
         $stmt->execute();
@@ -1112,7 +1104,6 @@ function updateUserRoleInDB($user_id, $role_id, $conn): array
         $row = $result->fetch_assoc();
         $stmt->close();
 
-        // Update or insert role
         if ($row['count'] > 0) {
             $stmt = $conn->prepare("UPDATE user_roles SET role_id = ? WHERE user_id = ?");
             $stmt->bind_param("ii", $role_id, $user_id);
@@ -1123,7 +1114,6 @@ function updateUserRoleInDB($user_id, $role_id, $conn): array
         $stmt->execute();
         $stmt->close();
 
-        // If changing from MANAGER to non-MANAGER, remove this user as manager from others
         if ($current_role && $current_role['role_name'] === 'MANAGER' &&
             $new_role && $new_role['name'] !== 'MANAGER') {
 

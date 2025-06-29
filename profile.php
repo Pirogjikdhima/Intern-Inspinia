@@ -335,7 +335,6 @@ require_once 'static/header.php';
             $('#viewMode').show();
             $('#editProfileBtn').text('Edit Profile').prop('disabled', false);
 
-            // Clear form errors
             $('#updateProfileForm').validate().resetForm();
             $('.error').text('');
         }
